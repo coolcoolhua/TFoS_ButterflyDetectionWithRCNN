@@ -1,0 +1,45 @@
+# /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
+# and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
+
+if [ "$PS1" ]; then
+  if [ "$BASH" ] && [ "$BASH" != "/bin/sh" ]; then
+    # The file bash.bashrc already sets the default PS1.
+    # PS1='\h:\w\$ '
+    if [ -f /etc/bash.bashrc ]; then
+      . /etc/bash.bashrc
+    fi
+  else
+    if [ "`id -u`" -eq 0 ]; then
+      PS1='# '
+    else
+      PS1='$ '
+    fi
+  fi
+fi
+
+if [ -d /etc/profile.d ]; then
+  for i in /etc/profile.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  unset i
+fi
+export TERM=xterm
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib 
+export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+export HADOOP_HOME=/opt/hadoop-2.7.5
+export YARN_HOME=HADOOP_HOME
+export CLASSPATH=$CLASSPATH:$HADOOP_HOME/lib
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export SPARK_HOME=/opt/spark-2.2.1-bin-hadoop2.7
+export PYTHONPATH=$SPARK_HOME/python/:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
+export CLASSPATH=$CLASSPATH:$PYTHONPATH
+export PATH=$PATH:$PYTHONPATH
+export TFOS_HOME=/usr/local/lib/python2.7/dist-packages/tensorflowonspark
+export QUEUE=default
+export LIB_HDFS=$HADOOP_HOME/lib/native
+TZ='Asia/Hong_Kong'; export TZ
